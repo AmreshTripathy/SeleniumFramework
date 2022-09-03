@@ -16,10 +16,11 @@ import io.github.bonigarcia.wdm.WebDriverManager;
  * @Amresh Tripathy
  */
 
-public class BrowserTest {
+public class BrowserTest extends CPA_Selenium {
 	
-	static final Logger LOG = Logger.getLogger("BrowserTest.class");
-	public static void main(String[] args) {
+	protected static final Logger LOG = Logger.getLogger("BrowserTest.class");
+	
+	protected void login(String account) {
 		
 //		System.setProperty("webdriver.chrome.driver",".\\drivers\\chromedriver\\chromedriver.exe");
 //		System.setProperty("webdriver.gecko.driver",".\\drivers\\geckodriver\\geckodriver.exe");
@@ -28,8 +29,7 @@ public class BrowserTest {
 		//		ChromeDriver driver = new ChromeDriver();
 //		WebDriver driver = new FirefoxDriver();
 //		EdgeDriver driver = new EdgeDriver();
-		boolean search = false;
-		WebDriverManager.firefoxdriver().setup();
+		
 		WebDriver driver = new FirefoxDriver();
 		try {
 			File downloadFolder = new File(".\\screenshots");
@@ -41,21 +41,21 @@ public class BrowserTest {
 			driver.findElement(By.xpath("//*[contains(@aria-label,\"allow cookies\")]")).click();
 			driver.findElement(By.xpath("(//*[contains(@class,'fl-button-text')])[2]")).click();
 			takeScreenShot(driver, downloadFolder.getAbsolutePath()+ "\\beforeLogin.jpg");
-			driver.findElement(By.name("username")).sendKeys("amreshtripathy184@gmail.com");
-			driver.findElement(By.name("password")).sendKeys("Lulu@2001");
+			driver.findElement(By.name("username")).sendKeys(credentials.get(userId));
+			driver.findElement(By.name("password")).sendKeys(credentials.get(password));
 			driver.findElement(By.xpath("//*[contains(text(),'Log In')]")).click();
 			Thread.sleep(3000);
 			String pageSource = driver.getPageSource();
 			if(pageSource.contains("amresh")) {
-				LOG.debug("login Successful");
+				LOG.debug("BrowserTest :: login Successful");
 				takeScreenShot(driver, downloadFolder.getAbsolutePath()+ "\\login.jpg");
 				Thread.sleep(3000);
-				search = search(driver);
+				search(driver);
 				driver.findElement(By.xpath("//*[contains(@data-analytics,\"NavBarProfileDropDown\")]")).click();
 				Thread.sleep(3000);
 				driver.findElement(By.xpath("//*[contains(text(),\"Logout\")]")).click();
 				takeScreenShot(driver, downloadFolder.getAbsolutePath()+ "\\logout.jpg");
-				LOG.debug("logout Completed");
+				LOG.debug("BrowserTest :: logout Completed for user " + account);
 			}else {
 				LOG.debug("login Failed");
 			}
