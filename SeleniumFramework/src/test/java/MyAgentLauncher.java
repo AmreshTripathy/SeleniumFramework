@@ -1,8 +1,5 @@
-import java.lang.reflect.Method;
-import java.lang.reflect.Parameter;
 import java.util.HashMap;
 
-import org.apache.commons.lang3.ObjectUtils.Null;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 
@@ -73,7 +70,7 @@ public class MyAgentLauncher {
 		
 		config.put(account_id, "1");
 		config.put(datatype_id, "1");
-		config.put(scheduler_class, "BrowserTest");
+		config.put(scheduler_class, "HackerRank");
 		config.put(processor, "webExecutor");
 		log.debug("MyAgentLauncher :: Starting the connection to the data base");
 		cp.connect();

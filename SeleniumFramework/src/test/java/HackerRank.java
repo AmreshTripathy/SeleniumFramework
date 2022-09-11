@@ -14,7 +14,7 @@ import org.openqa.selenium.firefox.FirefoxDriver;
  * @Amresh Tripathy
  */
 
-public class BrowserTest extends CPA_Selenium {
+public class HackerRank extends CPA_Selenium {
 	
 	protected static final Logger LOG = Logger.getLogger("BrowserTest.class");
 	
@@ -80,12 +80,18 @@ public class BrowserTest extends CPA_Selenium {
 			Thread.sleep(5000);
 			((JavascriptExecutor)driver).executeScript("arguments[0].scrollIntoView(true);", driver.findElement(By.xpath("//label[contains(@aria-label,\"Select Your Coding Language\")]")));
 			Thread.sleep(2000);
-			driver.findElement(By.xpath("//input[contains(@id,\"select-language-input\")]")).sendKeys("python");
+			WebElement languageSelector = driver.findElement(By.xpath("//input[contains(@id,\"select-language-input\")]"));
+			languageSelector.sendKeys("python 3" + Keys.ENTER);
+			
 			return true;
 		}catch(Exception e) {
 			LOG.error("BrowserTest :: Exception Occured in side Search method"+e.getMessage(),e);
 		}
 		return false;
+	}
+	
+	public static void fileSelector() {
+		
 	}
 	
 	public static void takeScreenShot(WebDriver driver, String path) throws Exception {
