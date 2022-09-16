@@ -1,3 +1,4 @@
+import java.io.File;
 import java.lang.reflect.Method;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -23,6 +24,7 @@ public class CPA_Selenium extends MyAgentLauncher{
 	protected final static String password = "password";
 	protected final static String login = "login";
 	protected static Logger log = Logger.getLogger("CPA_Selenium.class");
+	protected final static File testCodesFile = new File(".\\testCodes");
 	
 	protected HashMap<String, String> connect() {
 		Connection con = null;

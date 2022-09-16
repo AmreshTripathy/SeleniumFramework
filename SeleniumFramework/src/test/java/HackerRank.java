@@ -1,5 +1,9 @@
 import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
@@ -53,16 +57,16 @@ public class HackerRank extends CPA_Selenium {
 				Thread.sleep(3000);
 				driver.findElement(By.xpath("//*[contains(text(),\"Logout\")]")).click();
 				takeScreenShot(driver, downloadFolder.getAbsolutePath()+ "\\logout.jpg");
-				LOG.debug("BrowserTest :: logout Completed for user " + account);
+				LOG.debug("HackerRank :: logout Completed for user " + account);
 			}else {
-				LOG.debug("login Failed");
+				LOG.debug("HackerRank :: login Failed for user " + account);
 			}
 		}catch(Exception e) {
 			LOG.error("BrowserTest :: Exception Occured"+e.getMessage(),e);
 			try {
 				takeScreenShot(driver, ".\\\\screenshots\\\\error.jpg");
 			} catch (Exception e1) {
-				LOG.error("Exception Occured while taking ScreenShot");
+				LOG.error("HackerRank :: Exception Occured while taking ScreenShot");
 			}
 		}finally{
 			driver.close();
@@ -72,8 +76,9 @@ public class HackerRank extends CPA_Selenium {
 	
 	protected static boolean search(WebDriver driver) {
 		try {
+			String codeQuestion = "plus minus";
 			WebElement searchEnter =  driver.findElement(By.xpath("//*[contains(@placeholder,\"Search\")]"));
-			searchEnter.sendKeys("plus minus" + Keys.ENTER);
+			searchEnter.sendKeys(codeQuestion + Keys.ENTER);
 			Thread.sleep(3000);
 			searchEnter.sendKeys(Keys.ENTER);
 //			((JavascriptExecutor)driver).executeScript("window.scrollBy(0,890)", "");
@@ -82,16 +87,33 @@ public class HackerRank extends CPA_Selenium {
 			Thread.sleep(2000);
 			WebElement languageSelector = driver.findElement(By.xpath("//input[contains(@id,\"select-language-input\")]"));
 			languageSelector.sendKeys("python 3" + Keys.ENTER);
+			String inputCodes = fileSelector(testCodesFile, codeQuestion.replaceAll("\\s", "_"));
 			
 			return true;
 		}catch(Exception e) {
-			LOG.error("BrowserTest :: Exception Occured in side Search method"+e.getMessage(),e);
+			LOG.error("HackerRank :: Exception Occured in side Search method"+e.getMessage(),e);
 		}
 		return false;
 	}
 	
-	public static void fileSelector() {
-		
+	public static String fileSelector(File testCodesFile, String fileName) {
+		File[] fileArray = testCodesFile.listFiles();
+		String codes = "";
+		try {
+			for(File file : fileArray) {
+				if(StringUtils.equalsIgnoreCase(file.getName(), fileName)) {
+//					BufferedReader inputCodes = new BufferedReader(new FileReader(file.getAbsolutePath()));
+//					while(StringUtils.isNoneBlank((codes = inputCodes.readLine()), null)) {
+//						builder.append(codes).append("\n");
+//					}
+//					codes= builder.toString();
+					codes = new String(Files.readAllBytes(Paths.get(file.getAbsolutePath())));
+				}
+			}
+		}catch(Exception e) {
+			LOG.error("HackerRank :: Exception Occured inside fileSelector" + e.getMessage(),e);
+		}
+		return codes;
 	}
 	
 	public static void takeScreenShot(WebDriver driver, String path) throws Exception {
